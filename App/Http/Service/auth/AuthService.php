@@ -48,9 +48,6 @@ class AuthService
 
 
         $user = User::where('username', $request->username())->first();
-        if(!$user){
-            throw new Exception("huyasc");
-        }
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw new BusinessException(

@@ -1,0 +1,10 @@
+php artisan db:seed // Khởi tạo dữ liệu mặc định của admin, role, permission
+php artisan make:model User -mfcr // Lệnh tạo model và factory, migration, controller
+php artisan migrate // Cập nhật db từ các file migrate
+php artisan migrate:fresh --seed // Drop tất cả các bảng và chạy lại seed khởi tạo dữ liệu mặc định 
+php artisan make:migration nameFile // Tạo file migration
+php artisan serve  // chay du an
+tail -f storage/logs/laravel.log //xem log
+
+php artisan make:seeder fileName //tao seeder chay du lieu mau 
+php artisan db:seed --class=fileName // chay du lieu mau trong seeder

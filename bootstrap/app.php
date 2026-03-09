@@ -1,5 +1,6 @@
 <?php
 
+
 use App\Exceptions\GlobalException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -29,7 +30,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->renderable(function (Throwable $e, $request) {
+        $exceptions->renderable(renderUsing: function (Throwable $e, $request) {
             return app(GlobalException::class)->render($request, $e);
         });
     })

@@ -30,7 +30,7 @@ class ScheduleController extends Controller
 
         return $this->success($data, 'Xem lịch làm việc mặc định của một Chức vụ cụ thể.');
     }
- 
+
     /**
      * Xem báo cáo quân số chi tiết và danh sách nhân viên theo ca trong cả tuần
      * Endpoint: GET /api/schedules/weekly-report?date=2026-02-23

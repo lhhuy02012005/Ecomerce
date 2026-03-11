@@ -4,7 +4,6 @@ namespace App\Exceptions;
 
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
-use App\Exceptions\BusinessException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -44,7 +43,7 @@ class GlobalException extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         // 1. Ưu tiên xử lý BusinessException trước
-        if ($exception instanceof BusinessException) {
+        if ($exception instanceof \App\Exceptions\BusinessException) {
             return response()->json([
                 'timestamp' => now()->toIso8601String(),
                 'status' => $exception->getStatus(),
@@ -85,7 +84,7 @@ class GlobalException extends ExceptionHandler
             'path' => $request->getRequestUri(),
             'error' => 'Internal Server Error',
             // Nếu là BusinessException nhưng bị lỗi lồng nhau, hoặc ở Local thì hiện lỗi thật, còn lại hiện Unexpected
-            'message' => (app()->isLocal() || $exception instanceof BusinessException) 
+            'message' => (app()->isLocal() || $exception instanceof \App\Exceptions\BusinessException) 
                          ? $exception->getMessage() 
                          : 'Unexpected error',
         ], 500);

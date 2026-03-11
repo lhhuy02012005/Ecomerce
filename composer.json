@@ -6,7 +6,7 @@
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "php": "^8.4",
+        "php": "^8.2",
         "barryvdh/laravel-dompdf": "^3.1",
         "cloudinary/cloudinary_php": "^3.1",
         "darkaonline/l5-swagger": "^10.1",
@@ -31,7 +31,7 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "App/",
+            "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }

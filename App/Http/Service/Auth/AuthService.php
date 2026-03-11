@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Service\Auth;
+namespace App\Http\Service\auth;
 
 use App\Enums\OTPType;
 use App\Enums\Rank;
@@ -10,7 +10,7 @@ use App\Exceptions\BusinessException;
 use App\Exceptions\ErrorCode;
 use App\Exceptions\MessageError;
 use App\Http\Mapper\RoleMapper;
-use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\IntrospectRequest;
 
@@ -48,6 +48,9 @@ class AuthService
 
 
         $user = User::where('username', $request->username())->first();
+        if(!$user){
+            throw new Exception("huyasc");
+        }
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw new BusinessException(

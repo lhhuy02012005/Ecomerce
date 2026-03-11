@@ -26,7 +26,7 @@ WORKDIR /var/www
 COPY . .
 
 # 6. Cài đặt các thư viện PHP
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader --no-scripts
 
 # 7. Phân quyền
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache

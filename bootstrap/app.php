@@ -29,8 +29,13 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->renderable(function (Throwable $e, $request) {
-            return app(GlobalException::class)->render($request, $e);
+        // Thay renderable bằng using để ép Laravel dùng GlobalException của bạn
+        $exceptions->respond(function (Response $response, Throwable $e, $request) {
+            // Kiểm tra nếu class tồn tại thì mới gọi để tránh sập app
+            if (class_exists(GlobalException::class)) {
+                return app(GlobalException::class)->render($request, $e);
+            }
+            return $response;
         });
     })
     ->create();

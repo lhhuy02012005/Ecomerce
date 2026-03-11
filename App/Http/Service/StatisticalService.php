@@ -67,6 +67,7 @@ class StatisticalService
      */
     public function getRevenueCostProfit12Months()
     {
+        
         $year = Carbon::now()->year;
         $revenueList = [];
         $costList = [];

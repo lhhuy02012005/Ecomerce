@@ -11,7 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use Faker\Factory as Faker; // Thêm import này
+use Faker\Factory as Faker;
 
 class PositionSeeder extends Seeder
 {

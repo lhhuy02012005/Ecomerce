@@ -1,7 +1,7 @@
 FROM php:8.4-fpm
 
 # 1. Cài đặt các thư viện hệ thống cần thiết
-# Bổ sung libfreetype6-dev và libjpeg62-turbo-dev để hỗ trợ extension GD (phục vụ Maatwebsite Excel)
+# Bổ sung các thư viện hỗ trợ xử lý ảnh (GD) và nén (Zip)
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
     nginx
 
 # 2. Cấu hình và cài đặt PHP extensions
-# Phải có docker-php-ext-configure gd thì extension GD mới nhận đủ định dạng ảnh
+# Cần configure gd trước khi cài để Maatwebsite Excel không bị lỗi font/ảnh
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
@@ -31,12 +31,14 @@ WORKDIR /var/www
 COPY . .
 
 # 6. Cài đặt các thư viện PHP
-# QUAN TRỌNG: Thêm --ignore-platform-reqs để tránh lỗi lệch phiên bản PHP 8.2/8.4 khi build
+# Thêm --ignore-platform-reqs để bỏ qua việc kiểm tra ext-gd hay PHP 8.4 ở tầng build của Railway
 RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction --ignore-platform-reqs
 
-# 7. Phân quyền
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+# 7. Phân quyền cho Laravel (Quan trọng để không bị lỗi 500 Permission denied)
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache && \
+    chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
 EXPOSE 8000
 
+# Khuyên dùng: Dùng artisan serve cho môi trường test/dev trên Railway
 CMD php artisan serve --host=0.0.0.0 --port=8000

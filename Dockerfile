@@ -1,5 +1,7 @@
 FROM php:8.4-fpm
-# 1. Cài đặt các thư viện hệ thống cần thiết (Thêm libzip-dev)
+
+# 1. Cài đặt các thư viện hệ thống cần thiết
+# Bổ sung libfreetype6-dev và libjpeg62-turbo-dev để hỗ trợ extension GD (phục vụ Maatwebsite Excel)
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -9,10 +11,14 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     libzip-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
     nginx
 
-# 2. Cài đặt các PHP extensions (Bổ sung 'zip' vào danh sách install)
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+# 2. Cấu hình và cài đặt PHP extensions
+# Phải có docker-php-ext-configure gd thì extension GD mới nhận đủ định dạng ảnh
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
 # 3. Cài đặt và kích hoạt Redis
 RUN pecl install redis && docker-php-ext-enable redis
@@ -25,7 +31,8 @@ WORKDIR /var/www
 COPY . .
 
 # 6. Cài đặt các thư viện PHP
-RUN composer install --no-dev --optimize-autoloader --no-scripts
+# QUAN TRỌNG: Thêm --ignore-platform-reqs để tránh lỗi lệch phiên bản PHP 8.2/8.4 khi build
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction --ignore-platform-reqs
 
 # 7. Phân quyền
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache

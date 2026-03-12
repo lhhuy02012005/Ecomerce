@@ -1,4 +1,4 @@
-FROM php:8.2-fpm
+FROM php:8.4-fpm
 # 1. Cài đặt các thư viện hệ thống cần thiết (Thêm libzip-dev)
 RUN apt-get update && apt-get install -y \
     git \
